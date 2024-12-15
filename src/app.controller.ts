@@ -8,7 +8,19 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserModel } from './entity/user.entity';
-import { Repository } from 'typeorm';
+import {
+  Between,
+  ILike,
+  In,
+  IsNull,
+  LessThan,
+  LessThanOrEqual,
+  Like,
+  MoreThan,
+  MoreThanOrEqual,
+  Not,
+  Repository,
+} from 'typeorm';
 import { ProfileModel } from './entity/profile.entity';
 import { PostModel } from './entity/post.entity';
 import { TagModel } from './entity/tag.entity';
@@ -29,43 +41,39 @@ export class AppController {
   @Get('users')
   getUsers() {
     return this.userRepository.find({
-      // 아무것도 없을 경우 전부
-      // select: {},
-      // relations가 설정돼있을 경우
-      // select: {
-      //   id: true,
-      //   profile: {
-      //     id: true,
-      //   },
-      // },
-      // and 조건
+      // where: { id: Not(1) },
+      // where: { id: LessThan(30) },
+      // where: { id: LessThanOrEqual(30) },
       // where: {
-      //   version: 1,
-      //   id: 3,
+      //   id: MoreThan(30),
       // },
-      // or 조건
-      // where: [{ version: 1 }, { id: 3 }],
-      // relation이 설정 돼있을 경우
       // where: {
-      //   profile: {
-      //     id: 3,
-      //   },
+      //   id: MoreThanOrEqual(30),
       // },
-      // relations: {
-      //   profile: true,
+      // where: {
+      // email: Like('%google%'),
+      // email: ILike('%GOOGLE%'),
       // },
-      // order: {
-      //   id: 'ASC',
+      // where: {
+      //   // id: Between(10, 20),
+      //   // id: In([1, 3, 5, 7]),
       // },
-      // [skip, skip+take]
-      // skip: 1,
-      // take: 1,
+      where: {
+        id: IsNull(),
+      },
+      order: { id: 'ASC' },
     });
   }
 
   @Post('users')
-  postUser() {
-    return this.userRepository.save({});
+  async postUser() {
+    for (let i = 0; i < 100; i++) {
+      await this.userRepository.save({
+        email: `test-${i}@google.com`,
+      });
+    }
+
+    return;
   }
 
   @Patch('users/:id')
