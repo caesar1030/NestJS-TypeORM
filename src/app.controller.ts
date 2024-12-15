@@ -28,7 +28,39 @@ export class AppController {
 
   @Get('users')
   getUsers() {
-    return this.userRepository.find({});
+    return this.userRepository.find({
+      // 아무것도 없을 경우 전부
+      // select: {},
+      // relations가 설정돼있을 경우
+      // select: {
+      //   id: true,
+      //   profile: {
+      //     id: true,
+      //   },
+      // },
+      // and 조건
+      // where: {
+      //   version: 1,
+      //   id: 3,
+      // },
+      // or 조건
+      // where: [{ version: 1 }, { id: 3 }],
+      // relation이 설정 돼있을 경우
+      // where: {
+      //   profile: {
+      //     id: 3,
+      //   },
+      // },
+      // relations: {
+      //   profile: true,
+      // },
+      // order: {
+      //   id: 'ASC',
+      // },
+      // [skip, skip+take]
+      // skip: 1,
+      // take: 1,
+    });
   }
 
   @Post('users')
