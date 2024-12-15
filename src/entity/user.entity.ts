@@ -45,7 +45,12 @@ export class UserModel {
   @Generated('uuid')
   additionalID: string;
 
-  @OneToOne(() => ProfileModel, (profile) => profile.user)
+  @OneToOne(() => ProfileModel, (profile) => profile.user, {
+    eager: true,
+    cascade: true,
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   profile: ProfileModel;
 
   @OneToMany(() => PostModel, (post) => post.author)

@@ -28,12 +28,7 @@ export class AppController {
 
   @Get('users')
   getUsers() {
-    return this.userRepository.find({
-      relations: {
-        profile: true,
-        posts: true,
-      },
-    });
+    return this.userRepository.find({});
   }
 
   @Post('users')
@@ -62,10 +57,9 @@ export class AppController {
   async createUserAndProfile() {
     const user = await this.userRepository.save({
       email: 'test@naver.com',
-    });
-    await this.profileRepository.save({
-      profileImg: 'asdf.png',
-      user,
+      profile: {
+        profileImg: 'asdf.jpg',
+      },
     });
 
     return user;
