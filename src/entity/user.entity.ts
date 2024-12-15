@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
+import { ProfileModel } from './profile.entity';
 
 export enum Role {
   ADMIN = 'admin',
@@ -18,10 +20,8 @@ export class UserModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    update: false,
-  })
-  title: string;
+  @Column()
+  email: string;
 
   @Column({
     type: 'enum',
@@ -42,4 +42,7 @@ export class UserModel {
   @Column()
   @Generated('uuid')
   additionalID: string;
+
+  @OneToOne(() => ProfileModel, (profile) => profile.user)
+  profile: ProfileModel;
 }
