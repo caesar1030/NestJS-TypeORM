@@ -38,6 +38,77 @@ export class AppController {
     private readonly tagRepository: Repository<TagModel>,
   ) {}
 
+  @Post('sample')
+  async sample() {
+    // 모델에 해당되는 객체 생성 - 저장은 안함
+    const user1 = this.userRepository.create({
+      email: 'test@naver.com',
+    });
+
+    const user2 = await this.userRepository.save(user1);
+
+    // preload
+    // 입력된 값을 기반으로 데이터베이스에 있는 데이터 불러오고
+    // 추가 입력된 값으로 데이터베이스에서 가져온 값들을 대체함.
+    // 저장하진 않음
+    const user3 = await this.userRepository.preload({
+      id: 101,
+      email: 'test3@naver.com',
+    });
+
+    // delete
+    await this.userRepository.delete(101);
+
+    // 값 증가시키기
+    await this.userRepository.increment(
+      {
+        id: 1,
+      },
+      'count',
+      2,
+    );
+
+    // 값 감소시키기
+    await this.userRepository.decrement(
+      {
+        id: 1,
+      },
+      'count',
+      2,
+    );
+
+    // 갯수 카운팅하기
+    const count = await this.userRepository.count({
+      where: {
+        email: ILike('%0%'),
+      },
+    });
+
+    // sum
+    const sum = await this.userRepository.sum('count', {
+      id: LessThan(4),
+    });
+
+    // average
+    const average = await this.userRepository.average('count', {
+      id: LessThan(4),
+    });
+
+    // minimum
+    const min = await this.userRepository.minimum('count', {
+      id: LessThan(4),
+    });
+
+    // maximum
+    const max = await this.userRepository.maximum('count', {
+      id: LessThan(4),
+    });
+
+    const usersAndCount = await this.userRepository.findAndCount({
+      take: 3,
+    });
+  }
+
   @Get('users')
   getUsers() {
     return this.userRepository.find({

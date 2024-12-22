@@ -45,6 +45,11 @@ export class UserModel {
   @Generated('uuid')
   additionalID: string;
 
+  @Column({
+    default: 0,
+  })
+  count: number;
+
   @OneToOne(() => ProfileModel, (profile) => profile.user, {
     eager: false,
     cascade: true,
